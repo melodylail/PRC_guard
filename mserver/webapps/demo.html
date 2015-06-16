@@ -1,0 +1,88 @@
+<html><head>
+		<meta charset="utf-8">
+		<title>World Network WAR</title>
+		<link rel="stylesheet" type="text/css" href="ipviking.css">
+		<link rel="stylesheet" type="text/css" href="flags.css">
+		<link rel="stylesheet" type="text/css" href="fonts.css">
+	</head>
+
+	<body class="f16">
+		<div id="loading" style="opacity: 0;">
+			<h1>Loading...</h1>
+		</div>
+		<div id="content" style="opacity: 1;">
+			<a href="">
+				<img id="logo" src="images/norse-white.png" alt="sword">
+			</a>
+			<div id="info"></div>
+
+
+			<div id="console" class="box gray-bg">
+				<a href="#" class="toggle" data-target="#console-table-container">
+					<div class="table-header">
+						<h1 class="table-header">
+							<span class="icon-open"></span>
+							Live Scan
+						</h1>
+					</div>
+				</a>
+				<div id="console-table-container" style="display: block;">
+					<table id="events-data">
+						<colgroup class="second-level">
+							<col class="timestamp-col" span="1">
+							<col class="attacker-org-col left-border" span="1">
+							<col class="location-col" span="1">
+							<col class="attacker-ip-col" span="1">
+							<col class="location-col left-border" span="1">
+							<col class="service-col left-border" span="1">
+							<col class="port-col" span="1">
+						</colgroup>
+
+						<tbody><tr class="first-level">
+							<th></th>
+							<th colspan="3" class="attacker">Attacker</th>
+							<th class="target">Target</th>
+							<th colspan="2">Type</th>
+						</tr>
+
+						<tr class="second-level">
+							<th>Timestamp</th>
+							<th>Organization</th>
+							<th>Location</th>
+							<th>IP</th>
+							<th>Location</th>
+							<th>Service</th>
+							<th>Port</th>
+						</tr>
+					</tbody></table>
+				</div>
+			</div>
+			
+			
+		<svg class="overlay" width="1280" height="578"><defs><filter id="blur"><feGaussianBlur stdDeviation="2"></feGaussianBlur></filter></defs><g class="world">
+
+
+		</g></svg><canvas class="buffer" width="64" height="64"></canvas><canvas id="visible-canvas" class="overlay" width="1280" height="578">This browser doesn't support Canvas elements</canvas><canvas class="buffer overlay" width="1280" height="578"></canvas><svg id="rate-graph"></svg></div>
+
+				<div id="message-panel" class="data box">
+			<div class="table-header gray-bg">
+				<h3>Message Dialog</h3>
+			</div>
+			<div id="message-container" class="black-solid table-container">
+				<span id="message-text"></span>
+				<button id="close-button" class="gray-bg" onclick="hideMessage();">Close</button>
+			</div>
+		</div>
+
+		<img id="unknown-icon" src="images/unknown-poly.png" style="left: 608.858697396749px; top: 474.196997825208px;">
+
+		<script type="text/javascript" src="js/d3.v3.min.js"></script>
+		<script type="text/javascript" src="js/queue.v1.min.js"></script>
+		<script type="text/javascript" src="js/topojson.v1.min.js"></script>
+		<script type="text/javascript" src="demo.js"></script>
+		<script type="text/javascript" src="presentations.js"></script>
+		<script type="text/javascript" src="js/jquery.js"></script>
+	
+
+
+</body></html>

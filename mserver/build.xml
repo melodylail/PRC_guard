@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<project name="ipps" default="build">
+	<property name="prj.dir" value="." />
+	<property name="src.dir" value="src" />
+	<property name="conf.dir" value="conf" />
+	<property name="lib.dir" value="lib" />
+	<property name="jetty.dir" value="3rd_party/jetty" />
+	
+	<property name="output.dir" value="output" />
+	<property name="output.tmp.dir" value="output/tmp" />
+	<property name="dest.dir" value="output/class" />
+	<property name="dest.debug.dir" value="output/debug/class" />
+	<property name="dist.dir" value="output/dist" />
+	<property name="dist.conf.dir" value="output/dist/conf" />
+	<property name="dist.war.path" value="output/dist/myapp" />
+	<property name="prj.jar" value="mserver.jar" />
+	<property name="prj.war" value="mserver.war" />
+
+	<path id="prj.classpath">
+		<pathelement path="./" />
+		<pathelement path="${src.dir}" />
+		<pathelement path="${dest.dir}" />
+		<fileset file="${prj.dir}/lib/*.jar" />
+		<fileset file="${prj.dir}/lib/jetty/*.jar" />
+	</path>
+
+	<target name="init">
+		<mkdir dir="${output.dir}" />
+		<mkdir dir="${output.tmp.dir}" />
+		<mkdir dir="${output.tmp.dir}/webapps" />
+		<mkdir dir="${output.tmp.dir}/conf" />
+		<mkdir dir="${dest.dir}" />
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${dist.conf.dir}" />
+		<mkdir dir="${dist.war.path}" />
+	</target>
+	
+	<target name="compile" depends="init">
+		<javac debug="true" debuglevel="lines,source" srcdir="${src.dir}" destdir="${dest.dir}" source="1.6" target="1.6">
+			<classpath refid="prj.classpath" />
+		</javac>
+	</target>
+	
+	<target name="jar" depends="compile">
+		<copy todir="${output.tmp.dir}/webapps">
+			<fileset file="webapps/**" />
+		</copy>
+		<mkdir dir="${output.tmp.dir}/webapps/WEB-INF/lib" />
+		
+		
+		<copy todir="${output.tmp.dir}/webapps/WEB-INF/lib">
+			<fileset file="${prj.dir}/lib/*.jar" />
+		</copy>
+		<copy todir="${output.tmp.dir}/webapps/WEB-INF/lib">
+			<fileset file="${prj.dir}/lib/jetty/*.jar" />
+		</copy>
+		
+		<copy todir="${output.tmp.dir}/webapps/WEB-INF/lib">
+			<fileset file="${prj.dir}/lib/jsp2.0/*.jar" />
+		</copy>
+		
+		<jar jarfile="${output.tmp.dir}/webapps/WEB-INF/lib/${prj.jar}" basedir="${dest.dir}" />
+	</target>
+	<target name="war" depends="jar">
+		<war destfile="${dist.dir}/myapp/${prj.war}" webxml="${output.tmp.dir}/webapps/WEB-INF/web.xml">
+			<fileset dir="${output.tmp.dir}/webapps" />
+		</war>
+	</target>	
+	<target name="build" depends="war">
+		<copy todir="${dist.dir}">
+			<fileset file="${jetty.dir}/**" />
+		</copy>
+
+		<copy todir="${dist.dir}/conf">
+			<fileset file="${conf.dir}/**" />
+		</copy>
+		<copy todir="${dist.dir}">
+			<fileset file="${prj.dir}/runPortal.sh" />
+		</copy>
+	</target>
+	
+	<target name="clean">
+		<delete dir="${output.dir}" />
+	</target>
+</project>
