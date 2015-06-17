@@ -24,7 +24,7 @@
 	<bean id="factory" class="com.king.server.Factory" autowire="byName">
 	</bean>
 	    
-	<bean id="startEntry" class="com.king.mserver.StartEntry">
+	<bean id="startEntry" class="com.king.server.StartEntry">
 	</bean>
 	
 	<!-- Enables the Spring MVC @Controller programming model -->

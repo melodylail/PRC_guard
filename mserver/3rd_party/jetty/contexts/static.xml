@@ -1,9 +1,6 @@
 <?xml version="1.0"  encoding="ISO-8859-1"?>
 <!DOCTYPE Configure PUBLIC "-//Jetty//Configure//EN" "http://www.eclipse.org/jetty/configure.dtd">
 <Configure class="org.mortbay.jetty.handler.ContextHandler">
-    <Set name="contextPath">/static</Set>
-    <Set name="resourceBase">/home/mike/portal/static
-    </Set>
     <Call name="addHandler">
         <Arg>
             <New class="org.mortbay.jetty.handler.ResourceHandler"/>
