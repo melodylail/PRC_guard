@@ -1,5 +1,7 @@
 
-Wifi
+message transmission direction should be considered also. TBD!!!
+
+Wifi only
   pre-condition, no password is set on AP
 
 using AP
@@ -20,3 +22,57 @@ using Android phone as AP
     
 here, Android is device installed Firechat and connected to Android's AP.
 Note, if using Android's AP as Firechat client, it can't send/receive messages to/from other firechat clients 
+
+Bluetooth only
+Android's version should be considered in the future.
+
+                Android           IOS
+    
+    Android       ok*              x
+    
+    IOS           x              ok
+× works in some devices
+
+
+Wifi & Bluetooth
+we should figure out the message can be sniffed by which type signaling(i mean, wifi or bluetooth or by both)
+
+ a.  bluetooth+wifi enabled in Android device, IOS only enable wifi
+
+                Android           IOS
+    
+    Android       ?              ?
+    
+    IOS           ?              ?
+
+b. bluetooth+wifi enabled in IOS device, Android only enable wifi
+
+                Android           IOS
+    
+    Android       ?              ?
+    
+    IOS           ?              ?
+
+c. bluetooth+wifi enabled in Android device, IOS only enable bluetooth
+
+                Android           IOS
+    
+    Android       ?              ?
+    
+    IOS           ?              ?
+
+d. bluetooth+wifi enabled in IOS device, Android only enable bluetooth
+
+                Android           IOS
+    
+    Android       ?              ?
+    
+    IOS           ?              ?
+    
+e. bluetooth+wifi enabled in Android&IOS device
+
+                Android           IOS
+    
+    Android       ?              ?
+    
+    IOS           ?              ?
