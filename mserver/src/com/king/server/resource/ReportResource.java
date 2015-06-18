@@ -126,6 +126,7 @@ public class ReportResource {
 						catch(Exception e){
  							logger.error("Failed to move " + f.getAbsolutePath() 
  									+ " to " + dstFile.getAbsolutePath(), e);
+ 							FileUtils.forceDelete(f.getAbsoluteFile());
  							e.printStackTrace();
 						}
 					}
