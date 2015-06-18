@@ -1,0 +1,22 @@
+
+Wifi
+  pre-condition, no password is set on AP
+
+using AP
+                Android           IOS
+    
+    Android       ok              ok
+    
+    IOS           ok              ok
+
+
+using Android phone as AP
+
+                Android           IOS
+    
+    Android       ok              ok
+    
+    IOS           ok              ok
+    
+here, Android is device installed Firechat and connected to Android's AP.
+Note, if using Android's AP as Firechat client, it can't send/receive messages to/from other firechat clients 
