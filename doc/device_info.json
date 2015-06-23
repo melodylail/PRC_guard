@@ -1,0 +1,23 @@
+{
+    "INFO": {
+        "id": 1,
+        "name": "guard-1",
+        "mac": "00:01:02:03:04:05"
+    },
+    "LOCATION": {
+        "city": "HK",
+        "longitude": "104.335433",
+        "latitude": "30.212782"
+    },
+    "FEATURE": {
+        "BT": 0,
+        "WIFI": 1,
+        "4G": 0
+    },
+    "STATUS": {
+        "ONLINE": 1,
+        "RUNNING": 1,
+        "INTERVAL": 3,
+        "HEARTBEAT": 1
+    }
+}
