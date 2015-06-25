@@ -27,6 +27,37 @@
 	<bean id="startEntry" class="com.king.server.StartEntry">
 	</bean>
 	
+	<bean id="serverDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver">
+        </property>
+        <property name="maxActive" value="1000">
+        </property>
+         <property name="maxWait" value="5">
+        </property>
+        <property name="url" value="${db.mysql.connectMserverString}">
+        </property>
+        <property name="validationQuery" value="SELECT 1 FROM DUAL" />
+        <property name="testOnBorrow" value="true" />
+    </bean>	
+
+    <bean id="reportDao" class="com.king.server.db.impl.ReportDaoImpl">
+        <constructor-arg ref="serverDataSource" />
+    </bean> 
+    
+    <bean id="deviceDao" class="com.king.server.db.impl.DeviceDaoImpl">
+        <constructor-arg ref="serverDataSource" />
+    </bean>  
+    
+    <bean id="userManager" class="com.king.server.db.impl.UserManagerImpl">
+		<constructor-arg ref="serverDataSource" />
+	</bean>
+	
+    <bean id="reportWorker" class="com.king.server.task.ReportWorker">
+	</bean>
+	
+     <bean id="reportCache" class="com.king.server.task.ReportCache">
+	</bean>
+	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<mvc:annotation-driven />
 

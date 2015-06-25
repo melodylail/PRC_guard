@@ -30,6 +30,8 @@ import com.king.server.Factory;
 import com.king.server.PortalConfUtil;
 import com.king.server.data.ErrorCode;
 import com.king.server.data.User;
+import com.king.server.response.ReportBean;
+import com.king.server.response.ReportsDataTableReponse;
 import com.king.server.response.ReportsReponse;
 
 
@@ -67,22 +69,78 @@ public class ReportResource {
 	}
 	
 	@GET
-	@Path("/query_all.bin")
+	@Path("/console/report/query_latest.bin")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response qeuryReports() {
+	public Response qeuryLatestReports() {
 		try {
-			logger.info("Receive qeuryAllReports request");
+			logger.debug("Receive qeuryLatestReports request");
 			
-			List<String> reports = getReports();
+			List<ReportBean> reports = Factory.getInstance().getReportCache().get_many();
 			ReportsReponse res = new ReportsReponse();
 			res.setError_code(ErrorCode.ERR_SUCCESS);
-			res.setMessage(ErrorCode.getErrMsg(ErrorCode.ERR_SUCCESS));	
 			res.setData(reports);
 			
 			return Response.ok(res).build();
 			
 		} catch (Exception e) {
-			logger.error("qeuryReports->Error", e);
+			logger.error("qeuryLatestReports->Error", e);
+			e.printStackTrace();
+		}
+		
+		logger.error("qeuryLatestReports->404 NOT FOUND");
+		
+		return Response.status(Status.NOT_FOUND).build();
+	}
+	
+	@GET
+	@Path("/console/report/query_all_count.bin")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response qeuryAllReportsCount() {
+		try {
+			logger.debug("Receive qeuryAllReportsCount request");
+			
+			int count = Factory.getInstance().getReportDao().queryReportsCount();
+			JSONObject jsonData = new JSONObject();
+			jsonData.put("error_code", ErrorCode.ERR_SUCCESS);
+			jsonData.put("count", count);
+			
+			return Response.ok(jsonData).build();
+			
+		} catch (Exception e) {
+			logger.error("qeuryLatestReports->Error", e);
+			e.printStackTrace();
+		}
+		
+		logger.error("qeuryLatestReports->404 NOT FOUND");
+		
+		return Response.status(Status.NOT_FOUND).build();
+	}
+	
+	@GET
+	@Path("/console/report/query_all.bin")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response qeuryAllReports(
+			@QueryParam("draw") int draw,
+			@QueryParam("start") int start,
+			@QueryParam("length") int length
+			) {
+		try {
+			logger.info("Receive qeuryAllReports request, draw=" + draw + ", start=" +start + ", length=" + length);
+			
+			ReportsDataTableReponse res = new ReportsDataTableReponse();
+			int count = Factory.getInstance().getReportDao().queryReportsCount();
+			
+			List<ReportBean> reports = Factory.getInstance().getReportDao().queryReports(start, length);
+			res.setDraw(draw);
+			res.setRecordsTotal(count);
+			res.setRecordsFiltered(count);
+			res.setData(reports);
+			
+			
+			return Response.ok(res).build();
+			
+		} catch (Exception e) {
+			logger.error("qeuryAllReports->Error", e);
 			e.printStackTrace();
 		}
 		
@@ -91,53 +149,48 @@ public class ReportResource {
 		return Response.status(Status.NOT_FOUND).build();
 	}
 	
-	private List<String> getReports(){
-		List<String> reports = new ArrayList<String>();
-		
-		try{
-			String reportDir = PortalConfUtil.getPortalConf().getProperty("upload.report.dir");
-			logger.info("upload.report.dir:" + reportDir);
-			String backupdir = PortalConfUtil.getPortalConf().getProperty("upload.report.backupdir");
-			logger.info("upload.report.backupdir:" + backupdir);		
+	@GET
+	@Path("/console/report/query_reports.bin")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response qeuryReportsByUser(
+			@QueryParam("account") String account,
+			@QueryParam("draw") int draw,
+			@QueryParam("start") int start,
+			@QueryParam("length") int length
+			) {
+		try {
+			logger.info("Receive qeuryReportsByUser request, account=" + account + ", draw=" + draw + ", start=" +start + ", length=" + length);
 			
-			File reportDirFile = new File(reportDir);
+			ReportsDataTableReponse res = new ReportsDataTableReponse();
+			int count = 0;
+			List<ReportBean> reports = new ArrayList<ReportBean>();
 			
-			for(File f : reportDirFile.listFiles()){
-				if(f.isFile()){
-					if(f.getName().endsWith("_101.rpt")){
-						logger.info("Found report file: " + f.getAbsolutePath());
-						BufferedReader br = new BufferedReader(new FileReader(f));
-						String line;
-						
-						while((line = br.readLine()) != null){
-							logger.info("report: " + line);
-							reports.add(new String(line));
-						}
-						
-						br.close();
-						
-						File dstFile = new File(backupdir, f.getName());
-						
-						try{
-							FileUtils.moveFile(f.getAbsoluteFile(), dstFile);
- 							logger.info("Success to move " + f.getAbsolutePath() 
- 									+ " to " + dstFile.getAbsolutePath());
-						}
-						catch(Exception e){
- 							logger.error("Failed to move " + f.getAbsolutePath() 
- 									+ " to " + dstFile.getAbsolutePath(), e);
- 							FileUtils.forceDelete(f.getAbsoluteFile());
- 							e.printStackTrace();
-						}
-					}
-				}
+			if(account == null || account.isEmpty()){
+				count = Factory.getInstance().getReportDao().queryReportsCount();
+				reports = Factory.getInstance().getReportDao().queryReports(start, length);
 			}
-		}
-		catch(Exception e){
-			logger.error("getReports catch exception: " + e.getMessage(), e);
+			else{
+				count = Factory.getInstance().getReportDao().queryReportsCountByUser(account);
+				reports = Factory.getInstance().getReportDao().queryReportsByUser(account, start, length);
+			}
+			res.setDraw(draw);
+			res.setRecordsTotal(count);
+			res.setRecordsFiltered(count);
+			res.setData(reports);
+			
+			
+			return Response.ok(res).build();
+			
+		} catch (Exception e) {
+			logger.error("qeuryReportsByUser->Error", e);
+			e.printStackTrace();
 		}
 		
-		return reports;
+		logger.error("qeuryReportsByUser->404 NOT FOUND");
+		
+		return Response.status(Status.NOT_FOUND).build();
 	}
+	
+	
 	
 }

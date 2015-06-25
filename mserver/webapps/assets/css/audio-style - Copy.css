@@ -1,0 +1,161 @@
+/* 
+    Thanks to Chris Coyier at css-tricks.com.  His site plays a big role in how I learn CSS. http://www.css-tricks.com
+    Also thanks to Brian Hadaway for his great HTML 5 audio player.  http://www.brianhadaway.com
+    Finally, thanks to you for reading this.  
+    - Dennis Cronin
+*/
+
+* 						  { margin:0; padding:0; }
+
+ul						  { list-style: none; margin: 40px 0 0 0;}
+
+a 						  { outline: none; color: #BFCEEF; font-family: arial, sans-serif; text-decoration: none; }
+a:hover					{ border-bottom: thin dotted; }
+
+.clear					 { clear: both; }
+.left					   { float: left; }
+.right					 { float: right; }
+.smaller				 { font-size: .7em; }
+.small					 { font-size: .8em; }
+.white					 { color: white }
+.gray					   { color: #777777; }
+.italics				 { font-style: italic }
+.center           { margin: 0 auto; width: 150px; }
+.big					   { font-size: 2.7em; font-weight: bold; display: block; }
+.bold					   { font-weight: bold; }
+.bottom-margin-30		{ margin-bottom: 30px; }
+.bottom-margin-15		{ margin-bottom: 15px; }
+.bottom-margin-8		{ margin-bottom: 8px; }
+.bottom-margin-none { margin-bottom: 0px; }
+.top-margin-30			{ margin-top: 30px; }
+.top-margin-15			{ margin-top: 15px; }
+.top-margin-3       { margin-top: 3px; }
+.left-margin-15			{ margin-left: 15px; }
+
+
+#page-wrap          { min-width: 1008px;}
+
+#logo               { height: 100px; width: 100px; position: absolute; left:-500px; }
+#title-bar          { display: block; min-height: 600px; width: 340px; margin: 0px 15px 0px 0px; padding: 37px; position: fixed; top: 0px; left: 36px; background: url(images/background-transparent.png); }
+#title              { display: block; height: 112px; width: 340px; background: url(images/title.png) no-repeat top left; text-indent: -9999px; }
+#title:hover        { border-bottom: 0px; }
+#title-tag          { width: 340px; margin: 10px 10px 30px 5px; }
+
+/* -------------- Radio Box ---------------- */
+/* #radio-box          { border: dotted; padding: 5px; width: 110px; text-align: center; background-color: #303030; margin: 5px auto; } */
+#radio-box h3       { font-size: 1.1em; }
+#radio-arrow        { display: block; height: 40px; width: 105px; padding: 2px; background: url(images/radio-arrow.png) no-repeat bottom center; text-indent: -9999px; }
+body#radio          { background: #ffffff; color: #999999; text-align: center; width: 160px; height: 500px; overflow: hidden; }
+body#radio a        { color: #2e2e2e; }
+ul#links li#radio-arrow		  { opacity: 1.0; }
+
+
+/* -------------- Latest Audio Box ---------------- */
+#episode-box-latest         { float: left; border: dotted; padding: 5px; width: 130px; margin-left: 8px; text-align: center; background-color: #303030; }
+#episode-box-latest h2      { margin-bottom: 7px; }
+#latest-audioButton-center  { margin: 0 auto 7px; height: 50px; width: 50px; }
+.episode-title-latest       { font-size: 1.3em; padding: 0px 0 0 0px; }
+.episode-subtitle-latest    { font-size: 0.9em; padding: 0px 0 0 0px; }
+
+
+
+
+/* -------------- links popup text ---------------- */
+
+			#nav1, #nav1 ul {
+				-moz-border-radius: 5px; -webkit-border-radius: 5px;
+				text-align: left;
+				font-size: 0.9em;
+				color: white;
+				padding: 5;
+				margin-bottom: 0;
+				margin-left: 0;
+				list-style: none;
+			}
+			
+			#nav1 a {
+				margin : 0;
+				display: block;
+				width: auto;
+			}
+			
+			#nav1 li {
+				padding: 0;
+				float: left;
+				width: auto;
+			}
+			
+			#nav1 li ul {
+				position: absolute;
+				width: auto;
+				background: black;
+				left: -999em;
+			}
+			
+			#nav1 li:hover ul {
+				left: auto;
+			}	
+
+
+/* -------------- Content ---------------- */
+#content              { width: 450px; min-height: 700px; margin: 90px 50px 0 40px; padding: 2em; float: right; background: url(images/background-transparent.png); }
+
+
+/* -------------- Episodes ---------------- */
+#episodes-title       { display: block; width: 149px; float: right; height: 55px; background: url(images/title-episodes.png) no-repeat top left; text-indent: -9999px; } 
+.number               { float: right; font-family: arial; font-size: 4em; font-weight: bolder; padding-left: 7px; margin-top: 10px; }
+.episode-box          { padding: 20px; margin: 0; border-top: dotted; }
+.episode-box:hover    { background-color: #303030; padding: 20px 17px 20px 17px; border-top: dotted; border-left: dotted; border-right: dotted; }
+.episode-box-notes    { margin: 10px 0 0 58px ;}
+.episode-title        { font-size: 1.3em; padding: 0px 0 0 58px; }
+.episode-subtitle     { margin: 0px 0 0 10px; font-size: 0.8em; }
+.episode-box-end      { display: block; height: 1px; border-top: dotted; }
+
+/* -------------- News ---------------- */
+#news-title         { display: block; width: 88px; float: right; height: 50px; background: url(images/title-news.png) no-repeat top left; text-indent: -9999px; } 
+.news-box           { padding: 20px; margin: 0; border-top: dotted; }
+.news-box:hover     { background-color: #303030; padding: 20px 17px 20px 17px; border-top: dotted; border-left: dotted; border-right: dotted; }
+.news-box img       { }
+.news-box h2        { margin: 2px 0 8px 0; padding: 0; }
+.news-date          { margin: -15px 0 0 0; float: right; }
+
+
+/* -------------- Contact ---------------- */
+#contact-title        { float: right; display: block; width: 131px; height: 51px; background: url(images/title-contact.png) no-repeat top left; text-indent: -9999px; } 
+#contact-form         { padding: 25px; border: dotted; }
+#contact-form:hover   { background-color: #303030 }
+
+
+/* -------------- Quiz ---------------- */
+#quiz-title         { float: right; display: block; width: 68px; height: 56px; background: url(images/title-quiz.png) no-repeat top left; text-indent: -9999px; } 
+#quiz ol            { margin-bottom: 10px; }
+#quiz li            { font-size: 1.0em; list-style: none; margin: 0; font-family: Arial; padding: 18px; }
+#quiz li:hover      { background-color: #303030;}
+.number-quiz        { float: left; font-family: arial; font-size: 4em; font-weight: bolder; margin:0px 8px 0 0; }
+.quiz-choices div   { margin: 0 0 2px 0px;}
+#quiz-results       { font-size: 2.5em; margin: 0px 0 30px 0; font-weight: bold; }
+.quiz-results-comments	{ font-size: 1.5em; margin-top: 3px; }
+#results-links      { font-size: 1.2em; margin: 90px 0 200px 0; font-weight: bold; }
+#results-links p    { margin-bottom: 7px;}
+#quiz-results-wrap  { background-color: #303030; padding: 15px; margin: 20px 0 0 0; }
+#quiz-results-wrap h1 { font-weight: bolder; font-size: 5em; }
+
+
+/* -------------- Film ---------------- */
+#film-title         { float: right; display: block; width: 68px; height: 49px; background: url(images/title-film.png) no-repeat top left; text-indent: -9999px; } 
+.film-box           { width: 450px; margin-bottom: 70px; }
+.film-box h2        { margin-left: 3px; }
+.film-box p         { margin: 0 0 3px 3px; }
+
+/* -------------- html 5 button player ---------------- */
+/* -------------- Thanks to Brian Hadaway! www.brianhadaway.com ---------------- */
+
+#fallback           { display: none; }
+.controls           { margin: 6px 0 4px 0;}
+.audioButton        { background: url("../img/button-line.png") no-repeat 0 0; cursor: pointer; margin: 0; padding: 0; height: 50px; width: 50px; float: left; }      
+.audioButton:hover  { background-position: 0 -100px; }
+.audioButton.playing{ background-position: 0 -200px; }
+.audioButton.playing:hover  { background-position: 0 -300px; }
+.audioButton.loading,
+.audioButton.loading:hover  { background-position: 0 -400px; }
+#player             { display: none; }

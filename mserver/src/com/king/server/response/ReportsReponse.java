@@ -2,12 +2,10 @@ package com.king.server.response;
 
 import java.util.List;
 
-import com.king.server.bean.ReportBean;
-
 public class ReportsReponse {
 	private int error_code;
 	private String message;
-	List<String> data;
+	List<ReportBean> data;
 	
 	public int getError_code() {
 		return error_code;
@@ -17,7 +15,7 @@ public class ReportsReponse {
 		return message;
 	}
 	
-	public List<String> getData() {
+	public List<ReportBean> getData() {
 		return data;
 	}
 	
@@ -29,7 +27,7 @@ public class ReportsReponse {
 		this.message = message;
 	}
 	
-	public void setData(List<String> data) {
+	public void setData(List<ReportBean> data) {
 		this.data = data;
 	}
 }

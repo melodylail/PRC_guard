@@ -12,6 +12,7 @@ public class ErrorCode {
 	
 	public static final int ERR_USR_NO_USER          = 200;
 	public static final int ERR_USR_AUTH_FAILED      = 201;
+	public static final int ERR_USR_EXSITED          = 204;
 	
 	
 	public static String getErrMsg(int error) {
@@ -32,6 +33,9 @@ public class ErrorCode {
 			break;
 		case ERR_USR_AUTH_FAILED:
 			msg = "Failed to authentication";
+			break;
+		case ERR_USR_EXSITED:
+			msg = "User existed";
 			break;
 		default:
 			break;

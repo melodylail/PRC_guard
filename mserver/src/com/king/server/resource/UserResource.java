@@ -34,54 +34,20 @@ public class UserResource {
 	private final Log logger = LogFactory.getLog(getClass());
 	
 	@GET
-	@Path("list_all.json")
-	public Response queryAllUser() {
-		try {
-			List<User> users = Factory.getInstance().getUserManager().getAllUser();
-			JSONArray jsonUsers = new JSONArray();
-			
-			for (User usr : users){
-				jsonUsers.put(usr.toJsonObj());
-			}
-			
-			JSONObject jsonData = new JSONObject();
-			jsonData.put("count", users.size());
-			jsonData.put("users", jsonUsers);
-			
-			JSONObject json = new JSONObject();
-			json.put("error_code", ErrorCode.ERR_SUCCESS);
-			json.put("message", ErrorCode.getErrMsg(ErrorCode.ERR_SUCCESS));
-			json.put("data", jsonData);
-			
-			logger.info("queryAllUser-> " + json.toString());
-			return Response.ok(json.toString()).build();
-			
-		} catch (Exception e) {
-			logger.error("queryAllUser->Error", e);
-			e.printStackTrace();
-		}
-		
-		logger.error("queryAllUser->404 NOT FOUND");
-		
-		return Response.status(Status.NOT_FOUND).build();
-	}
-	
-	@GET
-	@Path("show_all")
+	@Path("list_all.bin")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response listAllUser() {
 		try {
 			List<User> users = Factory.getInstance().getUserManager().getAllUser();
 			UsersReponse res = new UsersReponse();
 			res.setError_code(ErrorCode.ERR_SUCCESS);
-			res.setMessage(ErrorCode.getErrMsg(ErrorCode.ERR_SUCCESS));
 			
 			ArrayList<UserBean> usrBeans = new ArrayList<UserBean>();			
 			
 			for (User usr : users){
 				UserBean usrBean = new UserBean();
 				usrBean.setUser_name(usr.getName());
-				usrBean.setPassword(usr.getPassword());
+				usrBean.setPassword(Utils.md5(usr.getPassword()));
 				usrBean.setEmail(usr.getEmail());
 				usrBean.setRole(usr.getRole());
 				usrBean.setLast_modified_time(Utils.dateToString(usr.getLastModifyTime()));
@@ -93,17 +59,17 @@ public class UserResource {
 			return Response.ok(res).build();
 			
 		} catch (Exception e) {
-			logger.error("queryAllUser->Error", e);
+			logger.error("listAllUser->Error", e);
 			e.printStackTrace();
 		}
 		
-		logger.error("queryAllUser->404 NOT FOUND");
+		logger.error("listAllUser->404 NOT FOUND");
 		
 		return Response.status(Status.NOT_FOUND).build();
 	}
 	
 	@GET
-	@Path("show")
+	@Path("get_one.bin")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getOneUser(@DefaultValue("") @QueryParam("account") String name) {
 		try {
@@ -126,7 +92,7 @@ public class UserResource {
 			UserBean usrBean = new UserBean();	
 			
 			usrBean.setUser_name(usr.getName());
-			usrBean.setPassword(usr.getPassword());
+			usrBean.setPassword(Utils.md5(usr.getPassword()));
 			usrBean.setEmail(usr.getEmail());
 			usrBean.setRole(usr.getRole());
 			usrBean.setLast_modified_time(Utils.dateToString(usr.getLastModifyTime()));
@@ -146,9 +112,99 @@ public class UserResource {
 	}
 	
 	@POST
-	@Path("add")
+	@Path("add.bin")
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response addUser(@DefaultValue("") @QueryParam("account") String name) {
+	public Response addUser(UserRequest request) {
+		try {
+			
+			logger.info("addUser: " + request.toString());
+			
+			if(request.getUser_name().isEmpty() || request.getPassword().isEmpty()){
+				logger.error("addUser->Empty usr name or password.");
+				return ErrorCode.genErrResponse(ErrorCode.ERR_INVALID_PARAMS);
+			}
+			
+			CommonResponse res = new CommonResponse();
+			
+			if(Factory.getInstance().getUserManager().isUserExist(request.getUser_name())){
+				logger.error("addUser->user has existed: " + request.getUser_name());
+				return ErrorCode.genErrResponse(ErrorCode.ERR_USR_EXSITED);
+			}
+			
+			User usr = new User(request.getUser_name());
+			usr.setPassword(request.getPassword());
+			usr.setRole(request.getRole());
+			usr.setEmail(request.getEmail());
+			
+			if(Factory.getInstance().getUserManager().addUser(usr)){
+				res.setError_code(ErrorCode.ERR_SUCCESS);
+			}
+			else{
+				res.setError_code(ErrorCode.ERR_FAILED);
+			}
+			
+			return Response.ok(res).build();
+			
+		} catch (Exception e) {
+			logger.error("addUser->Error", e);
+			e.printStackTrace();
+		}
+		
+		logger.error("addUser->404 NOT FOUND");
+		
+		return Response.status(Status.NOT_FOUND).build();
+	}
+	
+	@POST
+	@Path("edit.bin")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response editUser(UserRequest request) {
+		try {
+			
+			logger.info("editUser: " + request.toString());
+			
+			if(request.getUser_name().isEmpty() || request.getPassword().isEmpty()){
+				logger.error("editUser->Empty usr name or password.");
+				return ErrorCode.genErrResponse(ErrorCode.ERR_INVALID_PARAMS);
+			}
+			
+			CommonResponse res = new CommonResponse();
+			
+			if(!Factory.getInstance().getUserManager().isUserExist(request.getUser_name())){
+				logger.error("editUser->user not existed: " + request.getUser_name());
+				return ErrorCode.genErrResponse(ErrorCode.ERR_USR_NO_USER);
+			}
+			
+			User usr = new User(request.getUser_name());
+			usr.setPassword(request.getPassword());
+			usr.setRole(request.getRole());
+			usr.setEmail(request.getEmail());
+			
+			if(Factory.getInstance().getUserManager().updateUser(usr)){
+				res.setError_code(ErrorCode.ERR_SUCCESS);
+			}
+			else{
+				res.setError_code(ErrorCode.ERR_FAILED);
+			}
+			
+			return Response.ok(res).build();
+			
+		} catch (Exception e) {
+			logger.error("addUser->Error", e);
+			e.printStackTrace();
+		}
+		
+		logger.error("addUser->404 NOT FOUND");
+		
+		return Response.status(Status.NOT_FOUND).build();
+	}
+	
+	@POST
+	@Path("delete.bin")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response deleteUser(@DefaultValue("") @QueryParam("account") String name) {
 		try {
 			
 			logger.debug("Input account: " + name);
@@ -158,38 +214,31 @@ public class UserResource {
 				return ErrorCode.genErrResponse(ErrorCode.ERR_INVALID_PARAMS);
 			}
 			
-			User usr = Factory.getInstance().getUserManager().findUser(name);
-			UserReponse res = new UserReponse();
+			CommonResponse res = new CommonResponse();
+			boolean ret = Factory.getInstance().getUserManager().deleteUser(name);
 			
-			if(usr == null){
-				logger.error("Not find user: " + name);
-				return ErrorCode.genErrResponse(ErrorCode.ERR_USR_NO_USER);
-			}			
 			
-			UserBean usrBean = new UserBean();	
-			
-			usrBean.setUser_name(usr.getName());
-			usrBean.setPassword(usr.getPassword());
-			usrBean.setEmail(usr.getEmail());
-			usrBean.setRole(usr.getRole());
-			usrBean.setLast_modified_time(Utils.dateToString(usr.getLastModifyTime()));
-			
-			res.setData(usrBean);
+			if(ret){
+				res.setError_code(ErrorCode.ERR_SUCCESS);
+			}
+			else{
+				res.setError_code(ErrorCode.ERR_FAILED);
+			}
 			
 			return Response.ok(res).build();
 			
 		} catch (Exception e) {
-			logger.error("getOneUser->Error", e);
+			logger.error("deleteUser->Error", e);
 			e.printStackTrace();
 		}
 		
-		logger.error("getOneUser->404 NOT FOUND");
+		logger.error("deleteUser->404 NOT FOUND");
 		
 		return Response.status(Status.NOT_FOUND).build();
 	}
 	
 	@POST
-	@Path("login.json")
+	@Path("login.bin")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response login(LoginRequest req) {

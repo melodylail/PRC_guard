@@ -10,4 +10,7 @@ public interface UserManager {
 	public boolean verify(String userName, String password);	
 	public boolean changeEmail(String userName, String email);
 	public ArrayList<User> getAllUser();
+	public boolean deleteUser(String userName);
+	public boolean isUserExist(String userName);
+	public boolean updateUser(User usr);
 }

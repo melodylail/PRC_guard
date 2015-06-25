@@ -1,14 +1,4 @@
-/*
- ********************************************************************************
- TREND MICRO HIGHLY CONFIDENTIAL INFORMATION:
- THIS SOFTWARE CONTAINS CONFIDENTIAL INFORMATION AND TRADE SECRETS OF TREND MICRO
- INCORPORATED AND MAY BE PROTECTED BY ONE OR MORE PATENTS. USE, DISCLOSURE, OR
- REPRODUCTION OF ANY PORTION OF THIS SOFTWARE IS PROHIBITED WITHOUT THE PRIOR
- EXPRESS WRITTEN PERMISSION OF TREND MICRO INCORPORATED.
- Copyright 2009 Trend Micro Incorporated. All rights reserved as an unpublished
- work.
- ********************************************************************************
- */
+
 package com.king.server.db.impl;
 
 import java.sql.Connection;
@@ -84,7 +74,7 @@ public class UserManagerImpl implements UserManager {
 		
 		try {
 			conn = connect();
-			st = conn.prepareStatement("SELECT Password, Email, Creater, CreateTime, Role FROM UserInfo WHERE UserName=?");
+			st = conn.prepareStatement("SELECT Password, Email, LastModifyTime, Role FROM UserInfo WHERE UserName=?");
 			st.setString(1, userName);
 			rs = st.executeQuery();
 			
@@ -230,11 +220,70 @@ public class UserManagerImpl implements UserManager {
 		
 		try {
 			conn = connect();
-			st = conn.prepareStatement("INSERT INTO UserInfo (UserName, Password, Email, Role, LastModifyTime) VALUES (?, ?, ?, ?, ?, now())");
+			st = conn.prepareStatement("INSERT INTO UserInfo (UserName, Password, Email, Role, LastModifyTime) VALUES (?, ?, ?, ?, now())");
 			st.setString(1, usr.getName());
 			st.setString(2,  usr.getPassword());
 			st.setString(3, usr.getEmail());
 			st.setInt(4, usr.getRole());
+			
+			result = st.executeUpdate() > 0;			
+			
+		} catch (SQLException e) {
+			logger.error("db error", e);
+		} finally {
+			cleanup(rs, st, conn);
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public boolean updateUser(User usr) {
+		boolean result = false;
+		Connection conn = null;
+		ResultSet rs = null;
+		PreparedStatement st = null;
+		
+		if(!isUserExist(usr.getName())){
+			logger.error("User not existed: " + usr.getName());
+			return false;
+		}
+		
+		try {
+			conn = connect();
+			st = conn.prepareStatement("UPDATE UserInfo SET Password=?, Email=?, Role=?, LastModifyTime=now() WHERE UserName=?");
+			st.setString(1,  usr.getPassword());
+			st.setString(2, usr.getEmail());
+			st.setInt(3, usr.getRole());
+			st.setString(4, usr.getName());
+			
+			result = st.executeUpdate() > 0;			
+			
+		} catch (SQLException e) {
+			logger.error("db error", e);
+		} finally {
+			cleanup(rs, st, conn);
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public boolean deleteUser(String userName){
+		boolean result = false;
+		Connection conn = null;
+		ResultSet rs = null;
+		PreparedStatement st = null;
+		
+		if(!isUserExist(userName)){
+			logger.error("User is not existed: " + userName);
+			return false;
+		}
+		
+		try {
+			conn = connect();
+			st = conn.prepareStatement("DELETE FROM UserInfo WHERE UserName=?");
+			st.setString(1, userName);
 			
 			result = st.executeUpdate() > 0;			
 			
