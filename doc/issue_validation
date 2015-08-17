@@ -1,0 +1,9 @@
+1. message encryption policy(encode/decode) in 7.0 ver
+
+2. message decryption flow when using AP with wap/wap2 encryption mode
+
+3. message sniff on-the-fly when using bluetooth protocol
+
+4. multimeida message (audio/picture ...) sniff 
+
+5. production quality requirment from XXXX (usage environment, sustain cycle/time)
